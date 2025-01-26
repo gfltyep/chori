@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chori забронировать столик</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            color: var(--tg-theme-text-color);
+            background: var(--tg-theme-bg-color);
+            font-family: 'Arial', sans-serif;
+        }
+
+        .Main {
+            width: 100%;
+            padding: 25px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 40px;
+            margin-bottom: 10px;
+        }
+
+        img {
+    width: 150px; /* Базовая ширина */
+    max-width: 100%; /* Не больше 100% ширины контейнера */
+    height: auto; /* Сохраняем пропорции */
+    margin: 30px auto; /* Отступы */
+}
+        .btn {
+            border: 0;
+            border-radius: 5px;
+            margin-top: 50px;
+            height: 60px;
+            width: 200px;
+            font-size: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            color: var(--tg-theme-button-text-color);
+            background: var(--tg-theme-button-color);
+        }
+
+        form {
+            display: none;
+            text-align: center;
+        }
+        
+        input {
+            outline: none;
+            border-radius: 5px;
+            border: 2px solid #535353;
+            padding: 15px 10px;
+            margin: 10px 0;
+            background: var(--tg-theme-section-separator-color);
+            color: var(--tg-theme-text-color);
+            transition: all .2s;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        input:focus {
+            border-color: var(--tg-theme-secondary-bg-color);
+        }
+
+        .flatpickr-calendar {
+            font-family: 'Arial', sans-serif;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .flatpickr-day.selected {
+            background: #4CAF50;
+            border-color: #4CAF50;
+        }
+
+        .flatpickr-day.today {
+            border-color: #4CAF50;
+        }
+
+        .flatpickr-day.today:hover {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .flatpickr-time input {
+            font-weight: bold;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
+</head>
+<body>
+    <div class="Main">
+        <h1>Chori</h1>
+        <img src="{{ url_for('static', filename='logo.jpg') }}" alt="">
+        <p></p>
+        <button class="btn f-btn">Отправить форму бронирования</button>
+    </div>
+    <form class="test-form">    
+        <input type="text" placeholder="Ваше имя" class="title-inp">
+        <input type="tel" id="phone" placeholder="Ваш телефон" class="desc-inp">
+        <input type="text" id="date-picker" placeholder="Выберите дату">
+        <input type="text" id="time-picker" placeholder="Выберите время">
+        <button class="btn s-btn">Отправить</button>
+    </form>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
+    <script>
+        flatpickr("#date-picker", {
+            animate: true, 
+            dateFormat: "Y-m-d", 
+            minDate: "today", 
+            locale: "ru"
+        });
+
+        flatpickr("#time-picker", {
+            enableTime: true, 
+            noCalendar: true, 
+            dateFormat: "H:i", 
+            time_24hr: true, 
+            minuteIncrement: 15, 
+            locale: "ru"
+        });
+
+        document.getElementById('phone').addEventListener('input', function (e) {
+            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+            e.target.value = '+7' + (x[2] ? ' (' + x[2] : '') + (x[3] ? ') ' + x[3] : '') + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
+        });
+
+        let tg = window.Telegram.WebApp;
+
+        let fBtn = document.getElementsByClassName("f-btn")[0];
+        let sBtn = document.getElementsByClassName("s-btn")[0];
+
+        fBtn.addEventListener("click", () => {
+            document.getElementsByClassName("Main")[0].style.display = "none";
+            document.getElementsByClassName("test-form")[0].style.display = "block";
+        });
+
+        sBtn.addEventListener("click", () => {
+            tg.close();
+        });
+    </script>
+</body>
+</html>

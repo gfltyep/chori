@@ -1,0 +1,14 @@
+{
+  "name": "chori-mini-apps",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "server": "npx http-server"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+}
